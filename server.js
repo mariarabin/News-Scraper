@@ -5,10 +5,10 @@ var express = require('express');
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
 
-var PORT = process.env.PORT || 8083;
+var PORT = process.env.PORT || 8084;
 var app = express();
 
-var db = require("./models");
+//var db = require("./models");
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/populate", { useNewUrlParser: true });
@@ -44,23 +44,19 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 //app.use('/static', express.static('public'));
 app.use(express.static(__dirname+'/public'));
-app.use(require('./controllers'));
+//app.use(require('./controllers'));
 
 
 // Routes
 app.get("/", function (req, res) {
     res.render("about");
 });
-app.get("/about", function (req, res) {
+app.get("/scraped", function (req, res) {
     res.render("about");
 });
 
-app.get("/portfolio", function (req, res) {
+app.get("/saved", function (req, res) {
     res.render("portfolio")
-});
-
-app.get("/contact", function (req, res) {
-    res.render("contact");
 });
 
 // Start our server so that it can begin listening to client requests.
