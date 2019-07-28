@@ -8,7 +8,7 @@ $(function() {
             type: "PUT"
         }).then(function() {
             let newText = $('<div>');
-            newText.text("News article has been d from the Saved News list");
+            newText.text("News article has been deleted from the 'Saved News' list");
             $('.articleDeleteBody').append(newText);
             $('#articleDeleteModal').modal('show');
         })
@@ -40,19 +40,13 @@ $(function() {
             let newFormGroup1 = $('<div>');
             newFormGroup1.addClass("form-group");
             let newFormGroupLabel1 = $('<label for="titleinput">');
-            newFormGroupLabel1.text("Note:");
+            newFormGroupLabel1.text("Note Details:");
             newFormGroup1.append(newFormGroupLabel1);
             newFormGroup1.append("<input id='titleinput' name='title' >");
-            //let newFormGroup2 = $('<div>');
-            //newFormGroup2.addClass("form-group");
-            //let newFormGroupLabel2 = $('<label for=bodyinput">');
-            //newFormGroupLabel2.text("Details");
-            //newFormGroup2.append(newFormGroupLabel2);
-            //newFormGroup2.append("<textarea id='bodyinput' name='body'></textarea>");
+            
 
             $('.saveNoteButton').attr("data-id", result._id)
             newForm.append(newFormGroup1);
-            //newForm.append(newFormGroup2);
             $('.noteModalBody').append(newForm)
 
             for (let i = 0; i < result.note.length; i ++) {
@@ -64,7 +58,7 @@ $(function() {
                 newCardBody.text(result.note[i].body)
                 newCard.append(newCardHeader);
                 newCard.append(newCardBody);
-                //newCard.append("<button class=deleteNoteButton data-id=" + i + ">Delete</button>");
+        
 
                 $('.noteModalHeader').append(newCard);
                 

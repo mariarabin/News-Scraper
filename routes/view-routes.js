@@ -41,9 +41,6 @@ module.exports = function(app) {
 
             if (found.length > 0) {
                 for (let i = 0; i < found.length; i ++ ) {
-
-                    console.log(found[i]);
-
                     newObject = {
                         id: found[i]._id,
                         headline: found[i].headline,

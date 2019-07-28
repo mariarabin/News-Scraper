@@ -3,7 +3,6 @@ const request = require("request");
 const db = require("../models")
 
 module.exports = function(app) {
-
     app.get("/api/all", function(req, res) {
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
         .then( function(response) {
@@ -18,9 +17,8 @@ module.exports = function(app) {
         })
     });
 
-    // post
+    
     app.post("/api/scrape", function(req, res) {
-
         request("http://www.npr.org/sections/news/", function(error, response, html) {
             const $ = cheerio.load(html);
             $("article.item").each(function(i, element) {
@@ -51,7 +49,6 @@ module.exports = function(app) {
     });
 
     app.delete("/api/reduce", function(req, res) {
-
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
         .then( function(found) {
 
@@ -69,7 +66,7 @@ module.exports = function(app) {
             db.Headline.remove({_id: {$in: overflowArray}}, function(error, result) {
 
                 result["length"] = countLength;
-                console.log(result)
+            
                 res.json(result)
 
             })
@@ -118,7 +115,7 @@ module.exports = function(app) {
     });
 
     app.post("/api/create/notes/:id", function(req, res) {
-        console.log(req.body);
+    
 
         db.Note.create(req.body)
         .then(function(dbNote) {

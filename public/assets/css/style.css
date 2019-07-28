@@ -10,11 +10,11 @@ body {
 
 #navbar {
     background: purple;
-	padding: 80px
-	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-	overflow: hidden;
+	padding: 30px;
+	font-family: "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif";
+    overflow: hidden;
+    font-size:25px;
 }
-
 .navLink {
     color: white;
     margin-right: 30px;
@@ -91,7 +91,7 @@ p {
 
 .noteCard {
     display: block;
-    width: 100%
+    width: 100%;
     color: rgb(102, 94, 94)
 }
 
