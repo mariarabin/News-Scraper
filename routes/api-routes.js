@@ -5,21 +5,16 @@ const db = require("../models")
 module.exports = function(app) {
 
     app.get("/api/all", function(req, res) {
-
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
         .then( function(response) {
             res.json(response.length)
-            // res.json(response)
         })
-
     });
 
     app.get("/api/notes/all", function(req, res) {
-
         db.Note.find({})
         .then( function(response) {
             res.json(response)
-            // res.json(response)
         })
     });
 
@@ -27,14 +22,8 @@ module.exports = function(app) {
     app.post("/api/scrape", function(req, res) {
 
         request("http://www.npr.org/sections/news/", function(error, response, html) {
-
             const $ = cheerio.load(html);
-
-            console.log($("article.item").length)
-
             $("article.item").each(function(i, element) {
-
-
                 let headline = $(element).find('.item-info').find('.title').find('a').text();
                 let summary = $(element).find('.item-info').find('.teaser').find('a').text();
                 let link = $(element).find('.item-info').find('.title').children().attr("href");
@@ -50,22 +39,17 @@ module.exports = function(app) {
                 }
 
                 db.Headline.create(headlineObject, function(error) {
-                    if (error) console.log("Article already exists: " + headlineObject.headline)
+                    if (error) console.log("News Article exists: " + headlineObject.headline)
                     else {
-                        console.log("New article: " + headlineObject.headline);
                     }
-
                     if (i == ($("article.item").length - 1)) {
-                        res.json("scrape complete")
+                        res.json("Done Scraping")
                     }
                 })
-
             });
-
         })
     });
 
-    // delete
     app.delete("/api/reduce", function(req, res) {
 
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
@@ -149,7 +133,6 @@ module.exports = function(app) {
 
     });
 
-    // delete Headline documents manually if needed
     app.get("/api/clear", function(req, res) {
 
         db.Headline.remove()
@@ -159,7 +142,7 @@ module.exports = function(app) {
 
     });
 
-    // delete Note
+    // Note Deletion
     app.delete("/api/delete/notes/:id", function(req, res) {
 
         db.Note.remove(
