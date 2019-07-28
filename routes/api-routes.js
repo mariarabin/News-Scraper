@@ -3,30 +3,44 @@ const request = require("request");
 const db = require("../models")
 
 module.exports = function(app) {
+
     app.get("/api/all", function(req, res) {
+
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
         .then( function(response) {
             res.json(response.length)
+            // res.json(response)
         })
+
     });
 
     app.get("/api/notes/all", function(req, res) {
+
         db.Note.find({})
         .then( function(response) {
             res.json(response)
+            // res.json(response)
         })
     });
 
+    // post
     app.post("/api/scrape", function(req, res) {
+
         request("http://www.npr.org/sections/news/", function(error, response, html) {
+
             const $ = cheerio.load(html);
+
             console.log($("article.item").length)
+
             $("article.item").each(function(i, element) {
+
+
                 let headline = $(element).find('.item-info').find('.title').find('a').text();
                 let summary = $(element).find('.item-info').find('.teaser').find('a').text();
                 let link = $(element).find('.item-info').find('.title').children().attr("href");
                 let photo = $(element).find('.item-image').find('.imagewrap').find('a').find('img').attr("src");
                 let date = $(element).find('.item-info').find('.teaser').find('a').find('time').attr("datetime");
+
                 let headlineObject = {
                     headline: headline,
                     summary: summary, 
@@ -38,20 +52,25 @@ module.exports = function(app) {
                 db.Headline.create(headlineObject, function(error) {
                     if (error) console.log("Article already exists: " + headlineObject.headline)
                     else {
+                        console.log("New article: " + headlineObject.headline);
                     }
+
                     if (i == ($("article.item").length - 1)) {
                         res.json("scrape complete")
                     }
                 })
+
             });
 
         })
     });
 
-    
+    // delete
     app.delete("/api/reduce", function(req, res) {
+
         db.Headline.find({$query: {saved: false} }).sort( { date: -1 })
         .then( function(found) {
+
             console.log(found.length);
             let countLength = found.length;
             let overflow = countLength - 25;
@@ -64,15 +83,20 @@ module.exports = function(app) {
             }
 
             db.Headline.remove({_id: {$in: overflowArray}}, function(error, result) {
+
                 result["length"] = countLength;
                 console.log(result)
                 res.json(result)
+
             })
+
         });
+
     })
 
     app.put("/api/save/article/:id", function(req, res) {
         let articleId = req.params.id;
+
         db.Headline.findOneAndUpdate(
             {_id: articleId},
             {
@@ -86,6 +110,7 @@ module.exports = function(app) {
 
     app.put("/api/delete/article/:id", function(req, res) {
         let articleId = req.params.id;
+
         db.Headline.findOneAndUpdate(
             {_id: articleId},
             {
@@ -98,6 +123,7 @@ module.exports = function(app) {
 
     app.get("/api/notes/:id", function(req, res) {
         let articleId = req.params.id;
+
         db.Headline.findOne(
             {_id: articleId}
         )
@@ -108,6 +134,8 @@ module.exports = function(app) {
     });
 
     app.post("/api/create/notes/:id", function(req, res) {
+        console.log(req.body);
+
         db.Note.create(req.body)
         .then(function(dbNote) {
             return db.Headline.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
@@ -121,22 +149,26 @@ module.exports = function(app) {
 
     });
 
-    
+    // delete Headline documents manually if needed
     app.get("/api/clear", function(req, res) {
+
         db.Headline.remove()
         .then(function() {
             res.json("documents removed from headline collection")
         })
+
     });
 
-    // Notes Deletion
+    // delete Note
     app.delete("/api/delete/notes/:id", function(req, res) {
+
         db.Note.remove(
             {_id: req.params.id}
         )
         .then(function(result) {
             res.json(result)
         })
+
     });
 
 
