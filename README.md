@@ -1,5 +1,6 @@
 # All the News That's Fit to Scrape
 # News-Scraper
+see https://news-scraper-18.herokuapp.com/
 
 ### Overview
 
@@ -83,3 +84,4 @@ Having an active and healthy commit history on GitHub is important for your futu
      * Feel free to add more content to your database (photos, bylines, and so on).
 
   2. Users should also be able to leave comments on the articles displayed and revisit them later. The comments should be saved to the database as well and associated with their articles. Users should also be able to delete comments left on articles. All stored comments should be visible to every user.
+  
